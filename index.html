@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MGR Global Connect — Discover the World</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --gold:#C9A84C;
+    --gold-light:#E8C96E;
+    --gold-dark:#A07830;
+    --cream:#FAF7F0;
+    --dark:#0F0E0B;
+    --dark2:#1C1A14;
+    --dark3:#2A271E;
+    --text-main:#1C1A14;
+    --text-muted:#6B6350;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter', 'Poppins', Arial, Helvetica, sans-serif;background:var(--cream);color:var(--text-main);overflow-x:hidden}
+  h1,h2,h3{font-family:'Poppins', 'Inter', Arial, Helvetica, sans-serif}
+  .display-font{font-family:'Poppins', 'Inter', Arial, Helvetica, sans-serif}
+
+  /* Scrollbar */
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:var(--dark)}
+  ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+
+  /* Animations */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes slideRight{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+  @keyframes countUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+  @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+  .animate-fadeUp{animation:fadeUp .7s ease forwards}
+  .animate-fadeIn{animation:fadeIn .7s ease forwards}
+  .animate-slideRight{animation:slideRight .7s ease forwards}
+  .animate-float{animation:float 3s ease-in-out infinite}
+
+  /* Nav */
+  #navbar{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .3s ease}
+  #navbar.scrolled{background:rgba(15,14,11,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.15);box-shadow:0 4px 30px rgba(0,0,0,.3)}
+  .nav-link{
+    font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;
+    font-weight:500;
+    font-size:.85rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.85);
+    text-decoration:none;
+    transition:all .3s;
+    position:relative;
+    padding:.3rem 0
+  }
+  .nav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+  .nav-link:hover{color:var(--gold-light)}
+  .nav-link:hover::after{width:100%}
+  .nav-link.active{color:var(--gold)}
+  .nav-link.active::after{width:100%}
+
+  /* Hero */
+  #hero{height:100vh;min-height:700px;position:relative;display:flex;align-items:center;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#0F0E0B 0%,#1C1A14 40%,#2A271E 100%);z-index:0}
+  .hero-overlay{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(201,168,76,.08) 0%,transparent 70%);z-index:1}
+  .hero-image-col{position:absolute;right:0;top:0;bottom:0;width:55%;overflow:hidden;z-index:0}
+  .hero-image-col::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--dark) 0%,transparent 50%);z-index:1}
+  .hero-image-col img{width:100%;height:100%;object-fit:cover;opacity:.5;filter:saturate(1.2)}
+  .hero-content{position:relative;z-index:2;padding-left:8%;max-width:680px}
+  .hero-tag{
+    display:inline-block;
+    font-size:.72rem;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    color:var(--gold);
+    border:1px solid rgba(201,168,76,.3);
+    padding:.4rem 1rem;
+    border-radius:2px;
+    margin-bottom:1.5rem;
+    animation:fadeIn 1s .2s ease both;
+    font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;
+    font-weight:500;
+    }
+  .hero-title{
+    font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;
+    font-size:clamp(3rem,7vw,5.5rem);
+    font-weight:300;
+    line-height:1.05;
+    color:#fff;
+    margin-bottom:1.5rem;
+    animation:fadeUp .9s .4s ease both
+    }
+  .hero-title em{font-style:italic;color:var(--gold-light)}
+  .hero-desc{
+    font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;
+    font-size:1.05rem;
+    color:rgba(255,255,255,.6);
+    line-height:1.8;
+    margin-bottom:2.5rem;
+    max-width:460px;
+    animation:fadeUp .9s .6s ease both
+    }
+  .btn-gold{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+    color:#000;
+    font-size:.82rem;
+    font-weight:600;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    padding:.85rem 2rem;
+    border:none;
+    cursor:pointer;
+    transition:all .3s;
+    text-decoration:none;
+    clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;
+  }
+  .btn-gold:hover{background:linear-gradient(135deg,var(--gold-light),var(--gold));transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.3)}
+  .btn-outline{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    background:transparent;
+    color:#fff;
+    font-size:.82rem;
+    font-weight:500;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    padding:.85rem 2rem;
+    border:1px solid rgba(255,255,255,.3);
+    cursor:pointer;
+    transition:all .3s;
+    text-decoration:none;
+    clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;
+  }
+  .btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+  .hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(255,255,255,.4);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;animation:fadeIn 1s 1.2s ease both}
+  .hero-scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:pulse 2s infinite}
+
+  /* Marquee */
+  .marquee-wrap{background:var(--gold);overflow:hidden;padding:.6rem 0}
+  .marquee-inner{display:flex;white-space:nowrap;animation:marquee 20s linear infinite}
+  .marquee-item{font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#000;font-weight:600;padding:0 2.5rem}
+  .marquee-sep{opacity:.4;padding:0 .5rem}
+
+  /* Section styles */
+  .section{padding:6rem 0}
+  .section-dark{background:var(--dark2);color:#fff}
+  .section-darker{background:var(--dark)}
+  .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+  .section-label{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;display:block}
+  .section-title{
+    font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;
+    font-size:clamp(2.2rem,5vw,3.5rem);
+    font-weight:300;
+    line-height:1.1;
+    margin-bottom:1.2rem
+    }
+  .section-title strong{font-weight:700}
+  .divider{width:60px;height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:2rem}
+
+  /* Reveal animation */
+  .reveal{opacity:0;transform:translateY(35px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s ease,transform .7s ease}
+  .reveal-left.visible{opacity:1;transform:translateX(0)}
+  .reveal-right{opacity:0;transform:translateX(40px);transition:opacity .7s ease,transform .7s ease}
+  .reveal-right.visible{opacity:1;transform:translateX(0)}
+
+  /* Cards */
+  .tour-card{background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.06);transition:all .4s ease;position:relative;font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;}
+  .tour-card:hover{transform:translateY(-8px);box-shadow:0 16px 50px rgba(0,0,0,.12)}
+  .tour-card:hover .card-img img{transform:scale(1.08)}
+  .card-img{height:220px;overflow:hidden;position:relative}
+  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+  .badge{position:absolute;top:1rem;right:1rem;background:var(--gold);color:#000;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .65rem;border-radius:2px;font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;}
+  .badge-dark{background:var(--dark);color:var(--gold)}
+
+  .service-card{background:#fff;border-radius:4px;padding:2.2rem;border:1px solid rgba(0,0,0,.06);transition:all .4s ease;position:relative;overflow:hidden;font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;}
+  .service-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+  .service-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.08)}
+  .service-card:hover::before{transform:scaleX(1)}
+  .service-icon{width:52px;height:52px;background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.05));border-radius:4px;display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem;font-size:1.5rem}
+
+  /* Stats */
+  .stat-item{text-align:center;padding:2rem}
+  .stat-number{
+    font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;
+    font-size:clamp(2.5rem,6vw,4.5rem);
+    font-weight:700;
+    color:var(--gold);
+    line-height:1;
+    display:block
+    }
+  .stat-label{font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:.5rem;display:block}
+
+  /* Blog */
+  .blog-card{background:#fff;border-radius:4px;overflow:hidden;transition:all .4s ease;font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;}
+  .blog-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.1)}
+  .blog-card:hover .card-img img{transform:scale(1.06)}
+
+  /* Testimonials */
+  .testimonial-card{
+    background:var(--dark3);
+    border:1px solid rgba(201,168,76,.1);
+    border-radius:4px;
+    padding:2.5rem;
+    position:relative;
+    font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;
+  }
+  .testimonial-card::before{content:'"';font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;font-size:6rem;color:rgba(201,168,76,.1);position:absolute;top:-1rem;left:1.5rem;line-height:1}
+  .stars{color:var(--gold);font-size:1rem;margin-bottom:1rem}
+
+  /* Progress bar */
+  .progress-bar{height:4px;background:rgba(0,0,0,.08);border-radius:2px;overflow:hidden;margin:.5rem 0}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:2px;transition:width .8s ease}
+
+  /* Form */
+  .form-input{
+    width:100%;
+    background:#fff;
+    border:1.5px solid rgba(0,0,0,.1);
+    border-radius:3px;
+    padding:.9rem 1.1rem;
+    font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;
+    font-size:.9rem;
+    color:var(--text-main);
+    outline:none;
+    transition:border-color .3s
+  }
+  .form-input:focus{border-color:var(--gold)}
+  .form-input::placeholder{color:var(--text-muted)}
+  textarea.form-input{resize:vertical;min-height:140px}
+  label.form-label{font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.4rem;display:block;font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;}
+
+  /* Map */
+  .map-container{border-radius:4px;overflow:hidden;border:2px solid rgba(201,168,76,.2)}
+
+  /* Footer */
+  footer{background:var(--dark);border-top:1px solid rgba(201,168,76,.15)}
+  .footer-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:.88rem;transition:color .3s;display:block;margin-bottom:.5rem;font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;}
+  .footer-link:hover{color:var(--gold)}
+
+  /* Hamburger */
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.5rem}
+  .hamburger span{display:block;width:24px;height:2px;background:#fff;transition:all .3s}
+  .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+  /* Mobile menu */
+  .mobile-menu{position:fixed;top:0;right:0;bottom:0;width:280px;background:var(--dark);z-index:999;transform:translateX(100%);transition:transform .4s ease;padding:5rem 2rem 2rem;display:flex;flex-direction:column;gap:1.5rem;box-shadow:-10px 0 40px rgba(0,0,0,.5);font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;}
+  .mobile-menu.open{transform:translateX(0)}
+  .mobile-nav-link{
+    color:rgba(255,255,255,.8);
+    text-decoration:none;
+    font-size:1.1rem;
+    font-weight:400;
+    letter-spacing:.08em;
+    padding:.5rem 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    transition:color .3s;
+    font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;
+  }
+  .mobile-nav-link:hover{color:var(--gold)}
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
+  .overlay.open{opacity:1;pointer-events:all}
+
+  /* Scroll to top */
+  #scrollTop{position:fixed;bottom:2rem;right:2rem;width:44px;height:44px;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:900;opacity:0;transform:translateY(20px);transition:all .3s;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%)}
+  #scrollTop.visible{opacity:1;transform:translateY(0)}
+  #scrollTop:hover{background:var(--gold-light);transform:translateY(-3px)}
+
+  /* Carousel */
+  .carousel{position:relative;overflow:hidden}
+  .carousel-track{display:flex;transition:transform .5s cubic-bezier(.77,0,.18,1)}
+  .carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;background:rgba(201,168,76,.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:all .3s;color:#000;font-size:1.2rem}
+  .carousel-btn:hover{background:var(--gold)}
+  .carousel-btn.prev{left:.5rem}
+  .carousel-btn.next{right:.5rem}
+  .carousel-dots{display:flex;justify-content:center;gap:.5rem;margin-top:1.2rem}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.2);border:none;cursor:pointer;transition:all .3s;padding:0}
+  .dot.active{background:var(--gold);width:24px;border-radius:3px}
+
+  /* About timeline */
+  .timeline{position:relative;padding-left:2rem;font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;}
+  .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),transparent)}
+  .timeline-item{position:relative;margin-bottom:2.5rem}
+  .timeline-dot{position:absolute;left:-2.4rem;top:.3rem;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid var(--dark2);box-shadow:0 0 0 4px rgba(201,168,76,.15)}
+
+  /* Why choose us cards */
+  .why-card{background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(201,168,76,.02));border:1px solid rgba(201,168,76,.12);border-radius:4px;padding:2rem;transition:all .4s ease;font-family:'Inter','Poppins',Arial,Helvetica,sans-serif;}
+  .why-card:hover{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.05));transform:translateY(-4px);border-color:rgba(201,168,76,.3)}
+
+  /* Gradient text */
+  .gold-text{background:linear-gradient(135deg,var(--gold-light),var(--gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+  /* Featured tour highlight */
+  .featured-tour{position:relative;overflow:hidden;border-radius:4px}
+  .featured-tour img{width:100%;height:500px;object-fit:cover;filter:brightness(.6)}
+  .featured-tour-content{position:absolute;bottom:0;left:0;right:0;padding:2.5rem;background:linear-gradient(to top,rgba(15,14,11,.95),transparent);font-family:'Poppins','Inter',Arial,Helvetica,sans-serif;}
+
+  /* Geometric decoration */
+  .geo-circle{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,.1)}
+
+  @media(max-width:768px){
+    .hamburger{display:flex}
+    .desktop-nav{display:none}
+    .hero-image-col{width:100%;opacity:.3}
+    .hero-content{padding:1.5rem}
+    .section{padding:4rem 0}
+  }
+  @media(max-width:640px){
+    .hero-title{font-size:2.8rem}
+    .grid-3{grid-template-columns:1fr!important}
+    .grid-2{grid-template-columns:1fr!important}
+    .stats-grid{grid-template-columns:1fr 1fr!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding-top:1.2rem;padding-bottom:1.2rem">
+    <a href="#hero" style="text-decoration:none;display:flex;align-items:center;gap:.7rem">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);display:flex;align-items:center;justify-content:center"></div>
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:#fff;line-height:1">MGR Global</div>
+        <div style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-top:1px">Connect</div>
+      </div>
+    </a>
+    <div class="desktop-nav" style="display:flex;align-items:center;gap:2.5rem">
+      <a href="#home" class="nav-link">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#tours" class="nav-link">Tour Plans</a>
+      <a href="#blog" class="nav-link">Blog</a>
+      <a href="#contact" class="btn-gold" style="font-size:.75rem;padding:.6rem 1.4rem">Contact</a>
+    </div>
+    <div class="hamburger" id="hamburgerBtn">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home" class="mobile-nav-link" onclick="closeMobile()">Home</a>
+  <a href="#about" class="mobile-nav-link" onclick="closeMobile()">About</a>
+  <a href="#services" class="mobile-nav-link" onclick="closeMobile()">Services</a>
+  <a href="#tours" class="mobile-nav-link" onclick="closeMobile()">Tour Plans</a>
+  <a href="#blog" class="mobile-nav-link" onclick="closeMobile()">Blog</a>
+  <a href="#contact" class="mobile-nav-link" onclick="closeMobile()">Contact</a>
+  <div style="margin-top:auto;padding-top:2rem;border-top:1px solid rgba(255,255,255,.08)">
+    <p style="color:rgba(255,255,255,.3);font-size:.8rem">+91 8679461701</p>
+    <p style="color:rgba(255,255,255,.3);font-size:.8rem;margin-top:.3rem">rahulrana996@gmail.com</p>
+  </div>
+</div>
+<div class="overlay" id="overlay" onclick="closeMobile()"></div>
+
+<!-- HERO -->
+<section id="home" style="height:100vh;min-height:700px;position:relative;display:flex;align-items:center;overflow:hidden;background:var(--dark)">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(201,168,76,.06) 0%,transparent 60%)"></div>
+  <!-- Decorative circles -->
+  <div class="geo-circle" style="width:600px;height:600px;right:-150px;top:-100px;border-color:rgba(201,168,76,.04)"></div>
+  <div class="geo-circle" style="width:400px;height:400px;right:50px;top:50px;border-color:rgba(201,168,76,.06)"></div>
+  <!-- Hero image side -->
+  <div style="position:absolute;right:0;top:0;bottom:0;width:52%;overflow:hidden">
+    <div style="position:absolute;inset:0;background:linear-gradient(90deg,var(--dark) 0%,rgba(15,14,11,.3) 60%,transparent 100%);z-index:1"></div>
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80" alt="Travel" style="width:100%;height:100%;object-fit:cover;filter:saturate(1.1) brightness(.55)"/>
+  </div>
+  <div style="position:relative;z-index:2;padding-left:8%;max-width:700px">
+    <div class="hero-tag">🌍 Curated Journeys Worldwide</div>
+    <h1 class="hero-title">Discover the<br/><em>World</em> with<br/>MGR Global</h1>
+    <p class="hero-desc">Premium travel experiences crafted for those who seek more than a destination. Let us take you on a journey that transforms.</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .9s .8s ease both">
+      <a href="#tours" class="btn-gold">Explore Tours ↗</a>
+      <a href="#contact" class="btn-outline">Contact Us</a>
+    </div>
+    <div style="display:flex;gap:2.5rem;margin-top:3rem;animation:fadeUp .9s 1s ease both">
+      <div><span style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold)">500+</span><p style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:.2rem">Happy Travelers</p></div>
+      <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+      <div><span style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold)">15+</span><p style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:.2rem">Countries</p></div>
+      <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+      <div><span style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold)">40+</span><p style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:.2rem">Tours Done</p></div>
+    </div>
+  </div>
+  <!-- Scroll indicator -->
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="marquee-item">Japan <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Thailand <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Europe <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Dubai <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Bali <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Singapore <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Maldives <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Turkey <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Japan <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Thailand <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Europe <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Dubai <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Bali <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Singapore <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Maldives <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Turkey <span class="marquee-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- FEATURED TOURS CAROUSEL -->
+<section style="padding:6rem 0;background:var(--cream)">
+  <div class="container">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;flex-wrap:gap">
+      <div class="reveal">
+        <span class="section-label">✦ Featured Destinations</span>
+        <h2 class="section-title">Our <strong>Top Tours</strong></h2>
+        <div class="divider"></div>
+      </div>
+      <a href="#tours" style="color:var(--gold);font-size:.82rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;display:flex;align-items:center;gap:.5rem;transition:gap .3s" onmouseover="this.style.gap='.9rem'" onmouseout="this.style.gap='.5rem'">View All Tours →</a>
+    </div>
+    <div class="carousel" id="featuredCarousel">
+      <div class="carousel-track" id="featuredTrack">
+        <!-- Japan -->
+        <div style="min-width:calc(33.33% - 1rem);margin-right:1.5rem;flex-shrink:0" class="reveal">
+          <div class="tour-card">
+            <div class="card-img"><img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&q=80" alt="Japan"/><span class="badge">🌸 Japan</span></div>
+            <div style="padding:1.5rem">
+              <h3 style="font-size:1.4rem;font-weight:600;margin-bottom:.4rem">Cherry Blossom Tour</h3>
+              <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem">Tokyo · Kyoto · Osaka · Nara</p>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+                <span style="font-size:.78rem;color:var(--text-muted)">⏱ 7 Days</span>
+                <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--gold-dark)">₹1,85,000</span>
+              </div>
+              <a href="#contact" class="btn-gold" style="width:100%;justify-content:center;font-size:.76rem">Book Now →</a>
+            </div>
+          </div>
+        </div>
+        <!-- Thailand -->
+        <div style="min-width:calc(33.33% - 1rem);margin-right:1.5rem;flex-shrink:0" class="reveal">
+          <div class="tour-card">
+            <div class="card-img"><img src="https://images.unsplash.com/photo-1528181304800-259b08848526?w=600&q=80" alt="Thailand"/><span class="badge">🏖 Thailand</span></div>
+            <div style="padding:1.5rem">
+              <h3 style="font-size:1.4rem;font-weight:600;margin-bottom:.4rem">Beach & Culture Tour</h3>
+              <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem">Bangkok · Phuket · Krabi</p>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+                <span style="font-size:.78rem;color:var(--text-muted)">⏱ 5 Days</span>
+                <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--gold-dark)">₹95,000</span>
+              </div>
+              <a href="#contact" class="btn-gold" style="width:100%;justify-content:center;font-size:.76rem">Book Now →</a>
+            </div>
+          </div>
+        </div>
+        <!-- Europe -->
+        <div style="min-width:calc(33.33% - 1rem);margin-right:1.5rem;flex-shrink:0" class="reveal">
+          <div class="tour-card">
+            <div class="card-img"><img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80" alt="Europe"/><span class="badge">🏛 Europe</span></div>
+            <div style="padding:1.5rem">
+              <h3 style="font-size:1.4rem;font-weight:600;margin-bottom:.4rem">Grand Europe Package</h3>
+              <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem">Paris · Rome · Amsterdam · Prague</p>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+                <span style="font-size:.78rem;color:var(--text-muted)">⏱ 12 Days</span>
+                <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--gold-dark)">₹2,50,000</span>
+              </div>
+              <a href="#contact" class="btn-gold" style="width:100%;justify-content:center;font-size:.76rem">Book Now →</a>
+            </div>
+          </div>
+        </div>
+        <!-- Dubai -->
+        <div style="min-width:calc(33.33% - 1rem);margin-right:1.5rem;flex-shrink:0" class="reveal">
+          <div class="tour-card">
+            <div class="card-img"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80" alt="Dubai"/><span class="badge">🏙 Dubai</span></div>
+            <div style="padding:1.5rem">
+              <h3 style="font-size:1.4rem;font-weight:600;margin-bottom:.4rem">Luxury Dubai Escape</h3>
+              <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem">Downtown · Marina · Desert Safari</p>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+                <span style="font-size:.78rem;color:var(--text-muted)">⏱ 6 Days</span>
+                <span style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--gold-dark)">₹1,20,000</span>
+              </div>
+              <a href="#contact" class="btn-gold" style="width:100%;justify-content:center;font-size:.76rem">Book Now →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-btn prev" onclick="slideCarousel('featuredTrack',1)">←</button>
+      <button class="carousel-btn next" onclick="slideCarousel('featuredTrack',-1)">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section style="padding:6rem 0;background:var(--dark2)">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
+      <span class="section-label">✦ Why Choose Us</span>
+      <h2 class="section-title" style="color:#fff">What Makes Us <strong class="gold-text">Different</strong></h2>
+      <div class="divider" style="margin:0 auto"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem" class="grid-2" id="whyGrid">
+      <div class="why-card reveal"><div style="font-size:2rem;margin-bottom:1rem">🧭</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#fff;margin-bottom:.6rem">Trusted Travel Guide</h3><p style="color:rgba(255,255,255,.5);font-size:.88rem;line-height:1.7">Years of experience planning unforgettable journeys with genuine care for every traveler.</p></div>
+      <div class="why-card reveal"><div style="font-size:2rem;margin-bottom:1rem">💰</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#fff;margin-bottom:.6rem">Affordable Packages</h3><p style="color:rgba(255,255,255,.5);font-size:.88rem;line-height:1.7">Premium experiences at transparent prices — no hidden costs, no surprises.</p></div>
+      <div class="why-card reveal"><div style="font-size:2rem;margin-bottom:1rem">👥</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#fff;margin-bottom:.6rem">Small Group Tours</h3><p style="color:rgba(255,255,255,.5);font-size:.88rem;line-height:1.7">Intimate groups for a more personal, connected, and meaningful travel experience.</p></div>
+      <div class="why-card reveal"><div style="font-size:2rem;margin-bottom:1rem">🗺</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:#fff;margin-bottom:.6rem">Personal Trip Planning</h3><p style="color:rgba(255,255,255,.5);font-size:.88rem;line-height:1.7">Custom itineraries crafted around your wishes, pace, and travel dreams.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section style="padding:5rem 0;background:linear-gradient(135deg,var(--dark),var(--dark3));position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,168,76,.04) 0%,transparent 70%)"></div>
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;text-align:center" class="stats-grid">
+      <div class="stat-item reveal">
+        <span class="stat-number" id="stat1">500+</span>
+        <span class="stat-label">Happy Travelers</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-number" id="stat2">40+</span>
+        <span class="stat-label">Tours Organized</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-number" id="stat3">15+</span>
+        <span class="stat-label">Countries Covered</span>
+      </div>
+      <div class="stat-item reveal">
+        <span class="stat-number" id="stat4">5★</span>
+        <span class="stat-label">Average Rating</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="padding:6rem 0;background:var(--cream)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center" class="grid-2">
+      <div class="reveal-left">
+        <div style="position:relative">
+          <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=700&q=80" alt="About" style="width:100%;border-radius:4px;height:550px;object-fit:cover"/>
+          <div style="position:absolute;bottom:-1.5rem;right:-1.5rem;background:var(--dark);border:4px solid var(--cream);border-radius:4px;padding:1.5rem 2rem;box-shadow:0 10px 40px rgba(0,0,0,.15)">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;color:var(--gold)">2019</div>
+            <div style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5)">Founded</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <span class="section-label">✦ Our Story</span>
+        <h2 class="section-title">Passionate About <strong>Curated Travel</strong></h2>
+        <div class="divider"></div>
+        <p style="color:var(--text-muted);line-height:1.9;margin-bottom:2rem;font-size:.95rem">MGR Global Connect was born from a simple belief — travel should be transformative, personal, and accessible. Founded by <strong>Rahul Singh Rana</strong>, we started as a small travel enthusiast group in Dehradun and have grown into a trusted travel company serving hundreds of explorers across India.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;margin-bottom:.3rem">Our Mission</h4>
+            <p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">To create meaningful travel experiences that bring people together and foster cultural understanding.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;margin-bottom:.3rem">Small Group Focus</h4>
+            <p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">We cap groups at 10-12 people ensuring personalized attention and genuine connections on every trip.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;margin-bottom:.3rem">Led by Rahul Singh Rana</h4>
+            <p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">CEO & lead planner with a passion for exploring cultures and building lasting memories for travelers.</p>
+          </div>
+        </div>
+        <a href="#contact" class="btn-gold" style="margin-top:1.5rem;display:inline-flex">Get in Touch →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="padding:6rem 0;background:#F5F2EC">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
+      <span class="section-label">✦ What We Offer</span>
+      <h2 class="section-title">Our <strong>Services</strong></h2>
+      <div class="divider" style="margin:0 auto"></div>
+      <p style="max-width:500px;margin:0 auto;color:var(--text-muted);font-size:.95rem;line-height:1.8">From international adventures to personalized trip planning, we handle every detail so you can focus on the journey.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem" class="grid-3">
+      <div class="service-card reveal"><div class="service-icon">✈️</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:.6rem">International Tours</h3><p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">Expertly crafted international packages covering Asia, Europe, Middle East and beyond.</p></div>
+      <div class="service-card reveal"><div class="service-icon">🏔</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:.6rem">Domestic Tours</h3><p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">Explore the incredible diversity of India — from Himalayan peaks to tropical beaches.</p></div>
+      <div class="service-card reveal"><div class="service-icon">👨‍👩‍👧‍👦</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:.6rem">Group Trips</h3><p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">Curated small-group journeys where strangers become lifelong travel friends.</p></div>
+      <div class="service-card reveal"><div class="service-icon">🗺</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:.6rem">Custom Travel Planning</h3><p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">Tell us your dream destination and budget — we'll craft the perfect personalized itinerary.</p></div>
+      <div class="service-card reveal"><div class="service-icon">📄</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:.6rem">Visa Assistance</h3><p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">Complete visa documentation support to make your international travel stress-free.</p></div>
+      <div class="service-card reveal"><div class="service-icon">💬</div><h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:.6rem">Travel Consultation</h3><p style="color:var(--text-muted);font-size:.88rem;line-height:1.7">Free consultation sessions to help you plan the trip of a lifetime with expert guidance.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOUR PLANS -->
+<section id="tours" style="padding:6rem 0;background:var(--cream)">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
+      <span class="section-label">✦ Available Tours</span>
+      <h2 class="section-title">Book Your Next <strong>Adventure</strong></h2>
+      <div class="divider" style="margin:0 auto"></div>
+    </div>
+
+    <!-- Featured big tour -->
+    <div class="featured-tour reveal" style="margin-bottom:3rem">
+      <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1400&q=80" alt="Japan"/>
+      <div class="featured-tour-content">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+          <div>
+            <span style="background:var(--gold);color:#000;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .7rem;border-radius:2px;margin-bottom:.8rem;display:inline-block">🌸 Featured · Japan</span>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;color:#fff;line-height:1.1">Japan Cherry Blossom Tour</h3>
+            <p style="color:rgba(255,255,255,.7);font-size:.9rem;margin-top:.5rem">7 Days · Tokyo · Kyoto · Osaka · Nara · Mount Fuji</p>
+            <div style="display:flex;align-items:center;gap:1.5rem;margin-top:1rem">
+              <span style="color:rgba(255,255,255,.6);font-size:.82rem">📅 Mar 25 – Apr 1, 2025</span>
+              <span style="color:rgba(255,255,255,.6);font-size:.82rem">👥 6/10 seats left</span>
+            </div>
+            <div class="progress-bar" style="width:200px;margin-top:.6rem"><div class="progress-fill" style="width:40%"></div></div>
+          </div>
+          <div style="text-align:right">
+            <p style="color:rgba(255,255,255,.5);font-size:.8rem;margin-bottom:.3rem">Starting from</p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:var(--gold);line-height:1">₹1,85,000</p>
+            <p style="color:rgba(255,255,255,.4);font-size:.75rem;margin-bottom:1rem">per person</p>
+            <a href="#contact" class="btn-gold">Book This Tour →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tour grid -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem" class="grid-3">
+      <!-- Thailand -->
+      <div class="tour-card reveal">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1528181304800-259b08848526?w=600&q=80" alt="Thailand"/><span class="badge">🏖 Thailand</span></div>
+        <div style="padding:1.5rem">
+          <h3 style="font-size:1.35rem;font-weight:600;margin-bottom:.3rem">Thailand Beach Tour</h3>
+          <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:.8rem">Bangkok · Phuket · Krabi · Phi Phi Islands</p>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem">📅 Apr 10–14, 2025 &nbsp;·&nbsp; ⏱ 5 Days</div>
+          <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem"><span style="color:var(--text-muted)">Seats Available</span><span style="font-weight:600;color:#e53e3e">3 / 10 left</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:70%;background:linear-gradient(90deg,#e53e3e,#fc8181)"></div></div>
+          <div style="margin-top:1rem;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold-dark)">₹95,000</span>
+            <a href="#contact" class="btn-gold" style="font-size:.72rem;padding:.5rem 1rem">Book Now</a>
+          </div>
+        </div>
+      </div>
+      <!-- Europe -->
+      <div class="tour-card reveal">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80" alt="Europe"/><span class="badge">🏛 Europe</span></div>
+        <div style="padding:1.5rem">
+          <h3 style="font-size:1.35rem;font-weight:600;margin-bottom:.3rem">Grand Europe Package</h3>
+          <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:.8rem">Paris · Rome · Amsterdam · Prague · Vienna</p>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem">📅 May 5–16, 2025 &nbsp;·&nbsp; ⏱ 12 Days</div>
+          <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem"><span style="color:var(--text-muted)">Seats Available</span><span style="font-weight:600;color:#38a169">8 / 10 left</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:20%;"></div></div>
+          <div style="margin-top:1rem;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold-dark)">₹2,50,000</span>
+            <a href="#contact" class="btn-gold" style="font-size:.72rem;padding:.5rem 1rem">Book Now</a>
+          </div>
+        </div>
+      </div>
+      <!-- Dubai -->
+      <div class="tour-card reveal">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80" alt="Dubai"/><span class="badge">🏙 Dubai</span></div>
+        <div style="padding:1.5rem">
+          <h3 style="font-size:1.35rem;font-weight:600;margin-bottom:.3rem">Luxury Dubai Escape</h3>
+          <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:.8rem">Burj Khalifa · Marina · Desert Safari · Gold Souk</p>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem">📅 Apr 20–25, 2025 &nbsp;·&nbsp; ⏱ 6 Days</div>
+          <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem"><span style="color:var(--text-muted)">Seats Available</span><span style="font-weight:600;color:#d69e2e">5 / 10 left</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:50%;background:linear-gradient(90deg,#d69e2e,#f6e05e)"></div></div>
+          <div style="margin-top:1rem;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold-dark)">₹1,20,000</span>
+            <a href="#contact" class="btn-gold" style="font-size:.72rem;padding:.5rem 1rem">Book Now</a>
+          </div>
+        </div>
+      </div>
+      <!-- Bali -->
+      <div class="tour-card reveal">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80" alt="Bali"/><span class="badge">🌴 Bali</span></div>
+        <div style="padding:1.5rem">
+          <h3 style="font-size:1.35rem;font-weight:600;margin-bottom:.3rem">Bali Paradise Tour</h3>
+          <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:.8rem">Ubud · Seminyak · Uluwatu · Nusa Penida</p>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem">📅 Jun 1–7, 2025 &nbsp;·&nbsp; ⏱ 7 Days</div>
+          <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem"><span style="color:var(--text-muted)">Seats Available</span><span style="font-weight:600;color:#38a169">9 / 10 left</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:10%;"></div></div>
+          <div style="margin-top:1rem;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold-dark)">₹1,10,000</span>
+            <a href="#contact" class="btn-gold" style="font-size:.72rem;padding:.5rem 1rem">Book Now</a>
+          </div>
+        </div>
+      </div>
+      <!-- Singapore -->
+      <div class="tour-card reveal">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600&q=80" alt="Singapore"/><span class="badge">🌆 Singapore</span></div>
+        <div style="padding:1.5rem">
+          <h3 style="font-size:1.35rem;font-weight:600;margin-bottom:.3rem">Singapore City Tour</h3>
+          <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:.8rem">Marina Bay · Gardens by the Bay · Sentosa</p>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem">📅 May 20–24, 2025 &nbsp;·&nbsp; ⏱ 5 Days</div>
+          <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem"><span style="color:var(--text-muted)">Seats Available</span><span style="font-weight:600;color:#38a169">7 / 10 left</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:30%;"></div></div>
+          <div style="margin-top:1rem;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold-dark)">₹85,000</span>
+            <a href="#contact" class="btn-gold" style="font-size:.72rem;padding:.5rem 1rem">Book Now</a>
+          </div>
+        </div>
+      </div>
+      <!-- Maldives -->
+      <div class="tour-card reveal">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80" alt="Maldives"/><span class="badge">🐠 Maldives</span></div>
+        <div style="padding:1.5rem">
+          <h3 style="font-size:1.35rem;font-weight:600;margin-bottom:.3rem">Maldives Luxury Retreat</h3>
+          <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:.8rem">Overwater Villa · Snorkeling · Sunset Cruise</p>
+          <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem">📅 Jul 10–14, 2025 &nbsp;·&nbsp; ⏱ 5 Days</div>
+          <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem"><span style="color:var(--text-muted)">Seats Available</span><span style="font-weight:600;color:#e53e3e">2 / 8 left</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:75%;background:linear-gradient(90deg,#e53e3e,#fc8181)"></div></div>
+          <div style="margin-top:1rem;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold-dark)">₹1,65,000</span>
+            <a href="#contact" class="btn-gold" style="font-size:.72rem;padding:.5rem 1rem">Book Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section style="padding:6rem 0;background:var(--dark)">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
+      <span class="section-label">✦ Traveler Stories</span>
+      <h2 class="section-title" style="color:#fff">What Our <strong class="gold-text">Travelers Say</strong></h2>
+      <div class="divider" style="margin:0 auto"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem" class="grid-3">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p style="color:rgba(255,255,255,.7);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic">"The Japan Cherry Blossom tour was a dream come true. Rahul and the MGR team handled every detail perfectly — from the ryokan stays to the temple visits. Absolutely life-changing!"</p>
+        <div style="display:flex;align-items:center;gap:.8rem"><div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;color:#000;font-weight:700;font-size:.9rem">P</div><div><p style="color:#fff;font-size:.9rem;font-weight:600">Priya Sharma</p><p style="color:rgba(255,255,255,.4);font-size:.75rem">Delhi, India</p></div></div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p style="color:rgba(255,255,255,.7);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic">"Went on the Europe package with 10 complete strangers and came back with 10 best friends. The small group concept is genius. Value for money is unbeatable!"</p>
+        <div style="display:flex;align-items:center;gap:.8rem"><div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#4299e1,#2b6cb0);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem">A</div><div><p style="color:#fff;font-size:.9rem;font-weight:600">Arjun Mehta</p><p style="color:rgba(255,255,255,.4);font-size:.75rem">Dehradun, Uttarakhand</p></div></div>
+      </div>
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p style="color:rgba(255,255,255,.7);font-size:.92rem;line-height:1.8;margin-bottom:1.5rem;font-style:italic">"Rahul ji's personal attention to each traveler is what sets MGR apart. Our Thailand trip was seamlessly organized. Will definitely book again for the Maldives tour!"</p>
+        <div style="display:flex;align-items:center;gap:.8rem"><div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#48bb78,#2f855a);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.9rem">S</div><div><p style="color:#fff;font-size:.9rem;font-weight:600">Sunita Rawat</p><p style="color:rgba(255,255,255,.4);font-size:.75rem">Haridwar, Uttarakhand</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog" style="padding:6rem 0;background:var(--cream)">
+  <div class="container">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;flex-wrap:wrap;gap:1rem">
+      <div class="reveal">
+        <span class="section-label">✦ Travel Insights</span>
+        <h2 class="section-title">From Our <strong>Blog</strong></h2>
+        <div class="divider"></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem" class="grid-3">
+      <div class="blog-card reveal" style="background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.06)">
+        <div class="card-img" style="height:200px"><img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&q=80" alt="Japan Blog"/></div>
+        <div style="padding:1.5rem">
+          <span style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:600">Japan · Travel Guide</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin:.5rem 0 .7rem;line-height:1.3">Best Time to Visit Japan: A Complete Seasonal Guide</h3>
+          <p style="color:var(--text-muted);font-size:.85rem;line-height:1.7;margin-bottom:1rem">Discover when to experience sakura season, golden autumn foliage, and snow-capped mountains in Japan...</p>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:.75rem;color:var(--text-muted)">📅 Jan 15, 2025</span>
+            <a href="#" style="color:var(--gold);font-size:.8rem;font-weight:600;text-decoration:none;letter-spacing:.08em">Read More →</a>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.06)">
+        <div class="card-img" style="height:200px"><img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=600&q=80" alt="Travel Tips"/></div>
+        <div style="padding:1.5rem">
+          <span style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:600">Tips · Beginners</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin:.5rem 0 .7rem;line-height:1.3">First-Time International Traveler? Read This First</h3>
+          <p style="color:var(--text-muted);font-size:.85rem;line-height:1.7;margin-bottom:1rem">Passport, visa, forex, packing — everything a first-time international traveler from India needs to know...</p>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:.75rem;color:var(--text-muted)">📅 Dec 20, 2024</span>
+            <a href="#" style="color:var(--gold);font-size:.8rem;font-weight:600;text-decoration:none;letter-spacing:.08em">Read More →</a>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card reveal" style="background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.06)">
+        <div class="card-img" style="height:200px"><img src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=600&q=80" alt="Budget Travel"/></div>
+        <div style="padding:1.5rem">
+          <span style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:600">Budget · Southeast Asia</span>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin:.5rem 0 .7rem;line-height:1.3">The Ultimate Budget Travel Guide for Southeast Asia</h3>
+          <p style="color:var(--text-muted);font-size:.85rem;line-height:1.7;margin-bottom:1rem">How to explore Thailand, Bali and Vietnam on a shoestring budget without missing out on experiences...</p>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:.75rem;color:var(--text-muted)">📅 Nov 30, 2024</span>
+            <a href="#" style="color:var(--gold);font-size:.8rem;font-weight:600;text-decoration:none;letter-spacing:.08em">Read More →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BLOCK -->
+<section style="padding:5rem 0;background:linear-gradient(135deg,var(--dark3),var(--dark2));position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(201,168,76,.06) 0%,transparent 70%)"></div>
+  <div class="container" style="text-align:center;position:relative">
+    <span class="section-label" style="display:block;margin-bottom:.8rem">✦ Ready to Explore?</span>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;color:#fff;margin-bottom:1rem">Your Next Journey <em style="color:var(--gold-light)">Awaits</em></h2>
+    <p style="color:rgba(255,255,255,.5);font-size:.95rem;max-width:450px;margin:0 auto 2rem;line-height:1.8">Let us plan every detail so you can focus on collecting memories that last a lifetime.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="#tours" class="btn-gold" style="font-size:.82rem">Browse All Tours →</a>
+      <a href="tel:+918679461701" class="btn-outline" style="font-size:.82rem">📞 Call Us Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="padding:6rem 0;background:var(--cream)">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
+      <span class="section-label">✦ Get In Touch</span>
+      <h2 class="section-title">Start Your <strong>Journey Today</strong></h2>
+      <div class="divider" style="margin:0 auto"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:start" class="grid-2">
+      <div class="reveal-left">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;margin-bottom:1.5rem">Contact Information</h3>
+        <div style="display:flex;flex-direction:column;gap:1.5rem">
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <div style="width:44px;height:44px;background:rgba(201,168,76,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">📞</div>
+            <div><p style="font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem">Phone</p><a href="tel:+918679461701" style="color:var(--text-main);text-decoration:none;font-size:1rem;font-weight:500">+91 8679461701</a></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <div style="width:44px;height:44px;background:rgba(201,168,76,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">✉️</div>
+            <div><p style="font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem">Email</p><a href="mailto:rahulrana996@gmail.com" style="color:var(--text-main);text-decoration:none;font-size:1rem;font-weight:500">rahulrana996@gmail.com</a></div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:flex-start">
+            <div style="width:44px;height:44px;background:rgba(201,168,76,.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0">📍</div>
+            <div><p style="font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem">Address</p><p style="color:var(--text-main);font-size:.92rem;line-height:1.6">Guljar Farm, Shyampur<br/>PO S.N Temple, Dehradun<br/>Uttarakhand, India</p></div>
+          </div>
+        </div>
+        <div style="margin-top:2.5rem;padding-top:2rem;border-top:1px solid rgba(0,0,0,.08)">
+          <p style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem">Follow Us</p>
+          <div style="display:flex;gap:.8rem">
+            <a href="#" style="width:40px;height:40px;background:var(--dark);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:.9rem;transition:all .3s" onmouseover="this.style.background='var(--gold)';this.style.color='#000'" onmouseout="this.style.background='var(--dark)';this.style.color='#fff'">f</a>
+            <a href="#" style="width:40px;height:40px;background:var(--dark);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:.9rem;transition:all .3s" onmouseover="this.style.background='var(--gold)';this.style.color='#000'" onmouseout="this.style.background='var(--dark)';this.style.color='#fff'">in</a>
+            <a href="#" style="width:40px;height:40px;background:var(--dark);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:.9rem;transition:all .3s" onmouseover="this.style.background='var(--gold)';this.style.color='#000'" onmouseout="this.style.background='var(--dark)';this.style.color='#fff'">▶</a>
+            <a href="https://wa.me/918679461701" style="width:40px;height:40px;background:var(--dark);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:.9rem;transition:all .3s" onmouseover="this.style.background='#25D366';this.style.color='#fff'" onmouseout="this.style.background='var(--dark)';this.style.color='#fff'">📱</a>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div style="background:#fff;border-radius:4px;padding:2.5rem;box-shadow:0 4px 30px rgba(0,0,0,.06)">
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;margin-bottom:1.5rem">Send Us a Message</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+            <div><label class="form-label">Your Name</label><input type="text" class="form-input" placeholder="Rahul Singh"/></div>
+            <div><label class="form-label">Email Address</label><input type="email" class="form-input" placeholder="you@example.com"/></div>
+          </div>
+          <div style="margin-bottom:1rem"><label class="form-label">Phone Number</label><input type="tel" class="form-input" placeholder="+91 98765 43210"/></div>
+          <div style="margin-bottom:1rem"><label class="form-label">Tour Interest</label>
+            <select class="form-input" style="cursor:pointer">
+              <option value="">Select a destination...</option>
+              <option>Japan Cherry Blossom Tour</option>
+              <option>Thailand Beach Tour</option>
+              <option>Grand Europe Package</option>
+              <option>Luxury Dubai Escape</option>
+              <option>Bali Paradise Tour</option>
+              <option>Singapore City Tour</option>
+              <option>Maldives Luxury Retreat</option>
+              <option>Custom Trip Planning</option>
+            </select>
+          </div>
+          <div style="margin-bottom:1.5rem"><label class="form-label">Message</label><textarea class="form-input" placeholder="Tell us about your travel plans, group size, preferred dates..."></textarea></div>
+          <button onclick="handleSubmit(this)" style="width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;font-size:.82rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:1rem 2rem;border:none;cursor:pointer;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)">Send Enquiry →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section style="padding:0 0 6rem">
+  <div class="container">
+    <div class="map-container reveal" style="height:380px;border-radius:4px;overflow:hidden">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27667.09476936!2d77.9869!3d30.3165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390929c356c888af%3A0x4c3562c032518799!2sDehradun%2C%20Uttarakhand!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="padding:4rem 0 2rem">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08)" class="grid-2">
+      <div>
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:1rem">
+          <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%)"></div>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#fff">MGR Global Connect</div><div style="font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold)">Travel & Tours</div></div>
+        </div>
+        <p style="color:rgba(255,255,255,.4);font-size:.85rem;line-height:1.8;max-width:280px">Crafting transformative travel experiences from the heart of Dehradun, Uttarakhand since 2019.</p>
+        <div style="margin-top:1.2rem"><a href="tel:+918679461701" style="color:var(--gold);font-size:.9rem;text-decoration:none">+91 8679461701</a></div>
+      </div>
+      <div>
+        <p style="font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Quick Links</p>
+        <a href="#home" class="footer-link">Home</a>
+        <a href="#about" class="footer-link">About Us</a>
+        <a href="#services" class="footer-link">Services</a>
+        <a href="#tours" class="footer-link">Tour Plans</a>
+        <a href="#blog" class="footer-link">Blog</a>
+      </div>
+      <div>
+        <p style="font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Destinations</p>
+        <a href="#tours" class="footer-link">Japan Tours</a>
+        <a href="#tours" class="footer-link">Thailand Tours</a>
+        <a href="#tours" class="footer-link">Europe Tours</a>
+        <a href="#tours" class="footer-link">Dubai Tours</a>
+        <a href="#tours" class="footer-link">Bali Tours</a>
+      </div>
+      <div>
+        <p style="font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Address</p>
+        <p style="color:rgba(255,255,255,.4);font-size:.85rem;line-height:1.8">Guljar Farm, Shyampur<br/>PO S.N Temple<br/>Dehradun, Uttarakhand<br/>India - 248001</p>
+        <a href="mailto:rahulrana996@gmail.com" style="color:rgba(255,255,255,.5);font-size:.82rem;text-decoration:none;display:block;margin-top:.5rem;transition:color .3s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.5)'">rahulrana996@gmail.com</a>
+      </div>
+    </div>
+    <div style="padding-top:2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <p style="color:rgba(255,255,255,.25);font-size:.8rem">© 2025 MGR Global Connect. All rights reserved. CEO: Rahul Singh Rana</p>
+      <p style="color:rgba(255,255,255,.2);font-size:.75rem">Dehradun, Uttarakhand, India</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll to Top -->
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if(window.scrollY > 60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+
+  // Scroll top button
+  const btn = document.getElementById('scrollTop');
+  if(window.scrollY > 400) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+});
+
+// Hamburger
+document.getElementById('hamburgerBtn').addEventListener('click', () => {
+  document.getElementById('hamburgerBtn').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+});
+function closeMobile() {
+  document.getElementById('hamburgerBtn').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// Reveal on scroll
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, {threshold: 0.12});
+revealEls.forEach(el => observer.observe(el));
+
+// Carousel
+let carouselPos = {};
+function slideCarousel(trackId, dir) {
+  const track = document.getElementById(trackId);
+  const items = track.children;
+  if(!items.length) return;
+  const itemW = items[0].offsetWidth + 24;
+  const maxSlide = Math.max(0, items.length - 3);
+  carouselPos[trackId] = carouselPos[trackId] || 0;
+  carouselPos[trackId] = Math.max(0, Math.min(maxSlide, carouselPos[trackId] - dir));
+  track.style.transform = `translateX(-${carouselPos[trackId] * itemW}px)`;
+}
+
+// Responsive grid
+function applyGrids() {
+  const w = window.innerWidth;
+  document.querySelectorAll('.grid-3').forEach(el => {
+    el.style.gridTemplateColumns = w < 640 ? '1fr' : w < 900 ? '1fr 1fr' : 'repeat(3,1fr)';
+  });
+  document.querySelectorAll('.grid-2').forEach(el => {
+    el.style.gridTemplateColumns = w < 640 ? '1fr' : '1fr 1fr';
+  });
+  document.querySelector('#whyGrid').style.gridTemplateColumns = w < 640 ? '1fr' : w < 900 ? '1fr 1fr' : 'repeat(4,1fr)';
+  document.querySelector('.stats-grid').style.gridTemplateColumns = w < 640 ? '1fr 1fr' : 'repeat(4,1fr)';
+}
+applyGrids();
+window.addEventListener('resize', applyGrids);
+
+// Form submit
+function handleSubmit(btn) {
+  const orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Sending...';
+  btn.style.opacity = '.7';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.innerHTML = '✅ Message Sent! We\'ll contact you soon.';
+    btn.style.background = 'linear-gradient(135deg,#38a169,#276749)';
+    btn.style.color = '#fff';
+    btn.style.opacity = '1';
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.disabled = false;
+    }, 4000);
+  }, 1500);
+}
+
+// Active nav link on scroll
+const sections = ['home','about','services','tours','blog','contact'];
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(id => {
+    const el = document.getElementById(id) || document.querySelector(`#${id}`);
+    if(el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if(link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
